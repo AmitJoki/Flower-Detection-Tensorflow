@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Prediction</title>
+   <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+   <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+   <style>
+      body {
+         width: 50%;
+         margin: auto;
+      }
+   </style>
+</head>
+
+<body>
+   <h1>Prediction</h1>
+   <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" />
+   </form>
+   <div id="result">
+
+   </div>
+   <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+   <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+   <script>
+      FilePond.registerPlugin(FilePondPluginImagePreview)
+      FilePond.setOptions({
+         server: {
+            url: 'uploader',
+            process: {
+               onload: (data) => {
+                  data = JSON.parse(data);
+                  data = Object.entries(data).sort((a, b) => b[1] - a[1]); // Sort based on accuracy
+                  html = ''
+                  for (let i = 0; i < 5; i++) {
+                     html += `<h${i + 1}>${data[i][0]}: ${(data[i][1] * 100).toFixed(1)}% </h${i + 1}>`;
+                  }
+                  document.getElementById('result').innerHTML = html;
+               }
+            }
+         }
+      });
+      const inputElement = document.querySelector('input[type="file"]');
+      const pond = FilePond.create(inputElement);
+      pond.onremovefile = () => {
+         document.getElementById('result').innerHTML = '';
+      }
+   </script>
+</body>
+
+</html>
