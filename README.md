@@ -19,6 +19,11 @@ $ cd Flower-Detection TensorFlow
 $ flask run
 ```
 
+## Screenshot
+
+![Screenshot](https://user-images.githubusercontent.com/5158554/71674525-6a9ed480-2da1-11ea-9fe0-1bd2294f4e21.gif)
+
+
 ## License
 
 MIT.
